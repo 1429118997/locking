@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  
+          PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.redpacket.mapper.RedPackedDao">
+	<select id="getRedPackedById" parameterType="long"
+		resultType="RedPacked">
+		SELECT
+		rp.`red_packed_id`,rp.`user_id`,rp.`amount`,rp.`total`,rp.`stock`,rp.`unit_amount`,rp.`send_time`,rp.`version`,rp.`note`
+		FROM redpacted AS rp
+		WHERE rp.`red_packed_id`=#{redPackedId}
+	</select>
+
+	<update id="decrementRedpackedForStock" parameterType="long">
+		UPDATE
+		redpacted rp SET
+		rp.`stock`=rp.`stock`-1,rp.`version`=rp.`version`+1
+		WHERE
+		rp.`red_packed_id`=#{redPackedId} and rp.`version`=#{vsersion}
+	</update>
+	<!-- 可以使用动态sql解决两个sql的问题 -->
+	
+    <update id="decrementRedpacked" parameterType="long">
+		UPDATE
+		redpacted rp SET
+		rp.`stock`=rp.`stock`-1,rp.`version`=rp.`version`+1
+		WHERE
+		rp.`red_packed_id`=#{redPackedId}
+	</update>
+	
+	<select id="getRedPackedByIdToSayLocking" parameterType="long"
+		resultType="RedPacked">
+		SELECT
+		rp.`red_packed_id`,rp.`user_id`,rp.`amount`,rp.`total`,rp.`stock`,rp.`unit_amount`,rp.`send_time`,rp.`version`,rp.`note`
+		FROM redpacted AS rp
+		WHERE rp.`red_packed_id`=#{redPackedId}
+		FOR UPDATE
+	</select>
+</mapper>
